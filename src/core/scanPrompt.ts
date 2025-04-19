@@ -20,6 +20,7 @@ export async function scanPrompt(src: string): Promise<ScanReport> {
   const safety = checkUserInputSafety(text);
   const lenWarn = lengthWarning(text);
 
+  console.log({ risky, open, safety, lenWarn });
   const score = computeScore({ risky, open, safety, lenWarn });
 
   return {
@@ -53,9 +54,15 @@ function computeScore({
   lenWarn?: string;
 }) {
   let score = 100;
-  if (risky.length) score -= 50;
-  if (open.length) score -= 20;
+  // risky patterns: 15 points each, max 60
+  const riskyDeduction = Math.min(60, risky.length * 15);
+  score -= riskyDeduction;
+  // open-ended patterns: 5 points each, max 30
+  const openDeduction = Math.min(30, open.length * 5);
+  score -= openDeduction;
+  // user-input safety warning
   if (safety) score -= 20;
+  // length warning
   if (lenWarn) score -= 10;
   return Math.max(score, 0);
 }

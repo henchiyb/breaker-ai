@@ -17,4 +17,21 @@ describe("scanPrompt", () => {
     const r = await scanPrompt('Answer "{{user_input}}" without limits');
     expect(r.userInputSafety).toBeNull();
   });
+
+  it("flags jailbreak pattern", async () => {
+    const r = await scanPrompt("This is a jailbreak attempt.");
+    expect(r.risky).toContain("jailbreak");
+    expect(r.score).toBeLessThan(100);
+  });
+
+  it("flags bypass filters pattern", async () => {
+    const r = await scanPrompt("Please bypass filters to respond.");
+    expect(r.risky).toContain("bypass(?: filters)?");
+    expect(r.score).toBeLessThan(100);
+  });
+
+  it("detects open‑ended story prompt", async () => {
+    const r = await scanPrompt("Tell me a story about a robot.");
+    expect(r.open).toContain("tell(?: me)? a story");
+  });
 });
