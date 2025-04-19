@@ -3,7 +3,7 @@ export function checkUserInputSafety(template: string): string | null {
   const placeholder = "{{user_input}}";
 
   if (!template.includes(placeholder)) {
-    return null
+    return null;
   }
 
   // allow " {{user_input}} ", ' {{user_input}} ', ` {{user_input}} `
