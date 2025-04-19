@@ -1,6 +1,6 @@
 {
   "name": "breaker-ai",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "CLI to scan prompts for injection risks",
   "scripts": {
     "test": "vitest run",
@@ -13,7 +13,7 @@
     "pub": "npm run prepublishOnly && npm publish --access public --tag next"
   },
   "bin": {
-    "breaker": "dist/cli/index.js"
+    "breaker": "dist/src/cli/index.js"
   },
   "keywords": [
     "breaker",
