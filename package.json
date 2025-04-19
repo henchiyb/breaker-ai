@@ -1,6 +1,6 @@
 {
   "name": "breaker-ai",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "CLI to scan prompts for injection risks",
   "scripts": {
     "test": "vitest run",
@@ -9,7 +9,8 @@
     "start": "node dist/cli/index.js",
     "dev": "ts-node src/cli/index.ts",
     "prepublishOnly": "npm run test && npm run build",
-    "lint": "eslint . --ext .ts,.js,.mjs,.cjs"
+    "lint": "eslint . --ext .ts,.js,.mjs,.cjs",
+    "publish": "npm run prepublishOnly && npm publish --access public --tag next"
   },
   "bin": {
     "breaker": "dist/cli/index.js"
