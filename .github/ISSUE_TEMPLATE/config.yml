@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+defaults:
+  - label: bug
+    name: Bug report
+    description: Report a bug
+  - label: enhancement
+    name: Feature request
+    description: Suggest an enhancement

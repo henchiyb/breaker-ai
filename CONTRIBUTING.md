@@ -1,5 +1,16 @@
 # Contributing to breaker-ai
 
+## Branching and Release Strategy
+
+- All development should be performed in short-lived feature or fix branches, branched from `main` (e.g., `feature/your-feature`, `fix/your-bug`).
+- Submit changes via pull request (PR) to the `main` branch. All PRs require review before merging.
+- The `main` branch is always deployable and production-ready.
+- Releases are created by tagging the `main` branch with a version (e.g., `v1.2.3`).
+- After merging a PR intended for release, bump the version in `package.json` and create a new release tag.
+- Optionally, for larger releases, you may use a `release/` branch for last-minute fixes before tagging.
+
+This workflow keeps the repository simple and friendly for open source collaboration, while ensuring code quality and a clear release process.
+
 Thank you for your interest in contributing! 🎉
 
 ## How to contribute
