@@ -85,7 +85,7 @@ Prompt‑Security Report
 - [ ] Community pattern sharing
 - [ ] API/server mode
 
-*Have a feature idea? Open an issue or pull request!*
+_Have a feature idea? Open an issue or pull request!_
 
 ## 📄 License
 
