@@ -1,8 +1,8 @@
-import fs from 'node:fs/promises';
-import { riskyPatterns } from '../checks/riskyPatterns';
-import { checkUserInputSafety } from '../checks/userInputSafety';
-import { lengthWarning } from '../checks/lengthCheck';
-import { openEndedPatterns } from '../checks/openEndedPartterns';
+import fs from "node:fs/promises";
+import { riskyPatterns } from "../checks/riskyPatterns";
+import { checkUserInputSafety } from "../checks/userInputSafety";
+import { lengthWarning } from "../checks/lengthCheck";
+import { openEndedPatterns } from "../checks/openEndedPartterns";
 
 export interface ScanReport {
   risky: string[];
@@ -34,7 +34,7 @@ export async function scanPrompt(src: string): Promise<ScanReport> {
 async function load(s: string) {
   try {
     await fs.access(s);
-    return fs.readFile(s, 'utf-8');
+    return fs.readFile(s, "utf-8");
   } catch {
     return s;
   }
