@@ -14,13 +14,13 @@
 ## 🚀 Installation
 
 ```sh
-npm install -g breaker-ai@next
+npm install -g breaker-ai@cli
 ```
 
 Or use with npx (no install needed):
 
 ```sh
-npx breaker-ai@next scan <promptOrFile>
+npx breaker-ai@cli scan <prompt-file> [--expected <score>]
 ```
 
 ## ⚡ Usage
