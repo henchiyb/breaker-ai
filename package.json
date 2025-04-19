@@ -1,14 +1,25 @@
 {
-  "name": "breaker",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "breaker-ai",
+  "version": "0.0.1",
+  "description": "CLI to scan prompts for injection risks",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "node dist/cli/index.js",
+    "dev": "ts-node src/cli/index.ts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "bin": {
+    "breaker": "dist/cli/index.js"
+  },
+  "keywords": [
+    "breaker",
+    "ai",
+    "prompt",
+    "injection",
+    "security"
+  ],
+  "author": "Breaker AI",
+  "license": "MIT",
   "dependencies": {
     "@types/node": "^22.14.1",
     "chalk": "^5.4.1",
