@@ -1,34 +1,61 @@
-import fs from "node:fs/promises";
+import fs from 'node:fs/promises';
+import { riskyPatterns } from '../checks/riskyPatterns';
+import { checkUserInputSafety } from '../checks/userInputSafety';
+import { lengthWarning } from '../checks/lengthCheck';
+import { openEndedPatterns } from '../checks/openEndedPartterns';
 
-const risky = [/ignore.*instruction/i, /system.*prompt/i];
-const open = [/answer anything/i, /no restriction/i];
-
-export type Report = {
+export interface ScanReport {
   risky: string[];
   open: string[];
+  userInputSafety?: string | null;
   lengthWarning?: string;
-};
+  score: number; // 0‑100 (higher = safer)
+}
 
-export async function scanPrompt(input: string): Promise<Report> {
-  const text = await load(input);
+export async function scanPrompt(src: string): Promise<ScanReport> {
+  const text = await load(src);
+
+  const risky = matchAny(text, riskyPatterns);
+  const open = matchAny(text, openEndedPatterns);
+  const safety = checkUserInputSafety(text);
+  const lenWarn = lengthWarning(text);
+
+  const score = computeScore({ risky, open, safety, lenWarn });
+
   return {
-    risky: matches(text, risky),
-    open: matches(text, open),
-    lengthWarning:
-      text.length > 3000
-        ? "Prompt very long – may overflow context"
-        : undefined,
+    risky,
+    open,
+    userInputSafety: safety,
+    lengthWarning: lenWarn,
+    score,
   };
 }
 
-async function load(str: string) {
+async function load(s: string) {
   try {
-    await fs.access(str);
-    return fs.readFile(str, "utf8");
+    await fs.access(s);
+    return fs.readFile(s, 'utf-8');
   } catch {
-    return str;
+    return s;
   }
 }
-function matches(t: string, pats: RegExp[]) {
-  return pats.filter((p) => p.test(t)).map((p) => p.source);
+const matchAny = (t: string, pats: RegExp[]) => pats.filter(p => p.test(t)).map(p => p.source);
+
+function computeScore({
+  risky,
+  open,
+  safety,
+  lenWarn,
+}: {
+  risky: string[];
+  open: string[];
+  safety?: string | null;
+  lenWarn?: string;
+}) {
+  let score = 100;
+  if (risky.length) score -= 50;
+  if (open.length) score -= 20;
+  if (safety) score -= 20;
+  if (lenWarn) score -= 10;
+  return Math.max(score, 0);
 }
