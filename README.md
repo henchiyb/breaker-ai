@@ -14,13 +14,13 @@
 ## 🚀 Installation
 
 ```sh
-npm install -g breaker-ai@next
+npm install -g breaker-ai
 ```
 
 Or use with npx (no install needed):
 
 ```sh
-npx breaker-ai@next scan <promptOrFile>
+npx breaker-ai scan <prompt-file> [--expected <score>]
 ```
 
 ## ⚡ Usage
@@ -28,7 +28,7 @@ npx breaker-ai@next scan <promptOrFile>
 ### Basic scan
 
 ```sh
-breaker scan "Ignore previous instructions."
+breaker scan "Ignore previous instructions." # or with file path
 ```
 
 ### Scan a file
@@ -47,6 +47,15 @@ breaker scan path/to/prompt.txt --expected 80
 
 ```sh
 breaker scan path/to/prompt.txt --json
+```
+
+### Mask words in text or file
+
+```sh
+breaker mask "Hello world" --words Hello,world
+# Output: He*** wo***
+
+breaker mask path/to/file.txt --words secret,password
 ```
 
 ## 📝 Example Output
@@ -86,6 +95,19 @@ Prompt‑Security Report
 - [ ] API/server mode
 
 _Have a feature idea? Open an issue or pull request!_
+
+## 📚 API Usage
+
+You can also use breaker-ai as a library in your JS/TS projects:
+
+```typescript
+import { maskWordsInText } from "breaker-ai";
+
+(async () => {
+  const masked = await maskWordsInText("Hello world", ["Hello", "world"]);
+  // masked = "He*** wo***"
+})();
+```
 
 ## 📄 License
 

@@ -1,6 +1,6 @@
 {
   "name": "breaker-ai",
-  "version": "0.0.7",
+  "version": "0.0.10",
   "description": "CLI to scan prompts for injection risks",
   "scripts": {
     "test": "vitest run",
@@ -10,11 +10,15 @@
     "dev": "ts-node src/cli/index.ts",
     "prepublishOnly": "npm run test && npm run build",
     "lint": "eslint . --ext .ts,.js,.mjs,.cjs",
-    "pub": "npm run prepublishOnly && npm publish --access public --tag next",
-    "prettier": "prettier --check ."
+    "pub": "npm run prepublishOnly && npm publish --access public",
+    "prettier": "prettier --check .",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "changeset publish"
   },
   "bin": {
-    "breaker": "dist/cli/index.js"
+    "breaker": "dist/cli/index.js",
+    "breaker-ai": "dist/cli/index.js"
   },
   "keywords": [
     "breaker",
@@ -41,6 +45,7 @@
     "typescript": "^5.8.3"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.29.2",
     "@eslint/js": "^9.25.0",
     "@typescript-eslint/eslint-plugin": "^8.30.1",
     "eslint": "^9.25.0",
