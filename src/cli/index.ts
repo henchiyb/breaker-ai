@@ -7,6 +7,8 @@ import { maskWordsInText } from "../core/textMask";
 const program = new Command();
 program.name("breaker").description("Prompt‑security scanner").version(pkg.version);
 
+import { runJailbreakChecklist } from "../checks/jailbreakChecklist";
+
 program
   .command("mask")
   .argument("<textOrFile>", "Text to mask or a file path")
@@ -42,4 +44,34 @@ program
     }
   });
 
+program
+  .command("jailbreak")
+  .argument("<systemPrompt>", "System prompt string or file path")
+  .option("-j,--json <file>", "Path to output JSON file")
+  .action(async (target, opts) => {
+    let systemPrompt = target;
+    const fs = await import("fs/promises");
+    try {
+      if (
+        await fs
+          .stat(systemPrompt)
+          .then(s => s.isFile())
+          .catch(() => false)
+      ) {
+        systemPrompt = await fs.readFile(systemPrompt, "utf8");
+      }
+    } catch (err) {
+      console.error("\u001b[31m" + err + "\u001b[0m");
+      process.exit(1);
+    }
+    try {
+      const report = await runJailbreakChecklist(systemPrompt);
+      if (opts.json) {
+        await fs.writeFile(opts.json, JSON.stringify(report, null, 2), "utf8");
+      }
+    } catch (err) {
+      console.error("\u001b[31m" + err + "\u001b[0m");
+      process.exit(1);
+    }
+  });
 program.parse();

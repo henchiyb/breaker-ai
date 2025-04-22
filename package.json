@@ -41,7 +41,9 @@
   "dependencies": {
     "@types/node": "^22.14.1",
     "chalk": "^5.4.1",
+    "cli-table3": "^0.6.5",
     "commander": "^13.1.0",
+    "openai": "^4.95.1",
     "typescript": "^5.8.3"
   },
   "devDependencies": {
