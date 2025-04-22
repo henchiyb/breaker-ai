@@ -1,14 +1,21 @@
 import { ScanReport } from "../core/scanPrompt";
 import chalk from "chalk";
+import Table from "cli-table3";
 
 export function printTable(r: ScanReport) {
   console.log(chalk.bold("\nPrompt‑Security Report\n"));
-  console.table([
-    { Check: "Risky patterns", Result: r.risky.join(", ") || "None" },
-    { Check: "Open‑ended patterns", Result: r.open.join(", ") || "None" },
-    { Check: "User‑input safety", Result: r.userInputSafety || "OK" },
-    { Check: "Length", Result: r.lengthWarning || "OK" },
-    { Check: "Overall score", Result: r.score + "/100" },
-  ]);
+  const table = new Table({
+    head: ["Check", "Result"],
+    colWidths: [30, 70],
+    wordWrap: true,
+  });
+  table.push(
+    ["Risky patterns", r.risky.join(", ") || "None"],
+    ["Open‑ended patterns", r.open.join(", ") || "None"],
+    ["User‑input safety", r.userInputSafety || "OK"],
+    ["Length", r.lengthWarning || "OK"],
+    ["Overall score", r.score + "/100"]
+  );
+  console.log(table.toString());
   console.log("");
 }
