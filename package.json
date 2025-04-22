@@ -1,6 +1,6 @@
 {
   "name": "breaker-ai",
-  "version": "0.0.10",
+  "version": "1.0.1",
   "description": "CLI to scan prompts for injection risks",
   "scripts": {
     "test": "vitest run",
