@@ -69,6 +69,11 @@ program
       if (opts.json) {
         await fs.writeFile(opts.json, JSON.stringify(report, null, 2), "utf8");
       }
+      console.log(`Token usage:`);
+      console.log(`  Input tokens: ${report.totalPromptTokens}`);
+      console.log(`  Output tokens: ${report.totalCompletionTokens}`);
+      console.log(`  Total tokens: ${report.totalTokens}`);
+      console.log(`  Total cost (USD): $${report.totalCostUsd}`);
     } catch (err) {
       console.error("\u001b[31m" + err + "\u001b[0m");
       process.exit(1);
