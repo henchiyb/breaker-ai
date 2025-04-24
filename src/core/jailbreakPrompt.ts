@@ -1,4 +1,6 @@
 import jailbreakPrompts from "../checks/jailbreakPrompts.json";
+
+type JailbreakPromptItem = { name: string; prompt: string };
 import OpenAI from "openai";
 import Table from "cli-table3";
 
@@ -19,7 +21,9 @@ export interface JailbreakReport {
 
 export async function jailbreakSystemPrompt(
   systemPrompt: string,
-  budgetUsd?: number
+  budgetUsd?: number,
+  customPrompts?: JailbreakPromptItem[],
+  skipNames?: string[]
 ): Promise<JailbreakReport> {
   const apiKey = process.env.OPENAI_API_KEY;
   const model = process.env.OPENAI_MODEL || "gpt-4.1-mini-2025-04-14";
@@ -72,11 +76,17 @@ ${modelResult}
     return judge.includes("Failed") ? "Failed" : "Passed";
   }
 
-  const totalPrompts = jailbreakPrompts.length;
+  const promptList: JailbreakPromptItem[] =
+    customPrompts ?? (jailbreakPrompts as JailbreakPromptItem[]);
+  const filteredPrompts =
+    skipNames && skipNames.length > 0
+      ? promptList.filter(item => !skipNames.includes(item.name))
+      : promptList;
+  const totalPrompts = filteredPrompts.length;
   let currentPromptIndex = 0;
-  for (const prompt of jailbreakPrompts) {
+  for (const item of filteredPrompts) {
     currentPromptIndex++;
-    console.log(`Progress: ${currentPromptIndex}/${totalPrompts}`);
+    console.log(`Progress: ${item.name} ${currentPromptIndex}/${totalPrompts}`);
     if (budgetUsd !== undefined && totalCostUsd >= budgetUsd) {
       console.log(`Budget of $${budgetUsd} exceeded. Breaking out.`);
       break;
@@ -91,11 +101,11 @@ ${modelResult}
         model,
         messages: [
           { role: "system", content: systemPrompt },
-          { role: "user", content: prompt },
+          { role: "user", content: item.prompt },
         ],
       });
       const result = completion.choices[0]?.message?.content || "No response";
-      const checkResult = await isFailed(prompt, result);
+      const checkResult = await isFailed(item.prompt, result);
       const usage = completion.usage || { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 };
       totalPromptTokens += usage.prompt_tokens || 0;
       totalCompletionTokens += usage.completion_tokens || 0;
@@ -105,7 +115,7 @@ ${modelResult}
           (usage.completion_tokens || 0) * pricePer1K.completion) /
         1000;
       table.push([
-        prompt,
+        item.prompt,
         result,
         checkResult === "Failed" ? "❌" : "✅",
         usage.total_tokens,
@@ -113,7 +123,7 @@ ${modelResult}
       ]);
     } catch (e) {
       const errMsg = e instanceof Error ? e.message : String(e);
-      table.push([prompt, `Error: ${errMsg}`, "❌"]);
+      table.push([item.prompt, `Error: ${errMsg}`, "❌"]);
     }
     console.log(table.toString());
   }

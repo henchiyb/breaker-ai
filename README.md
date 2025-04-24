@@ -29,24 +29,28 @@ npx breaker-ai scan <prompt-file> [--expected <score>]
 ## <span style="background: #ffd700; color: #222; font-weight: bold; padding: 2px 6px; border-radius: 4px;">🆕 Jailbreak Resistance Testing</span>
 
 Test your system prompt against a suite of jailbreak attempts using OpenAI-compatible models (or OpenRouter):
-By default, breaker uses OpenAI's GPT-4.1-mini model, but you can specify a different model by setting the `OPENAI_MODEL` environment variable.
-You can also use OpenRouter by setting the `OPENAI_BASE_URL` and `OPENAI_MODEL` environment variables.
+
+- By default, breaker uses OpenAI's GPT-4.1-mini model, but you can specify a different model by setting the `OPENAI_MODEL` environment variable.
+- You can also use OpenRouter by setting the `OPENAI_BASE_URL` and `OPENAI_MODEL` environment variables.
 
 ```sh
-// Use OpenAI
-OPENAI_API_KEY=xxx npx breaker-ai jailbreak "path/to/systemPrompt.txt"
-# or
-npx breaker-ai jailbreak "Your system prompt here"
+// List all available prompts
+breaker-ai list-prompts
 
-# Use OpenRouter with Openrouter key
-OPENAI_API_KEY=open_router_key OPENAI_BASE_URL=https://openrouter.ai/api/v1 OPENAI_MODEL=any_openrouter_model npx breaker-ai jailbreak "path/to/systemPrompt.txt"
+// Use OpenAI, skip some prompts
+OPENAI_API_KEY=xxx npx breaker-ai jailbreak "path/to/systemPrompt.txt" --skip ai_diagnostics,red_teaming
+# or
+OPENAI_API_KEY=xxx npx breaker-ai jailbreak "Your system prompt here" --skip ai_diagnostics,red_teaming
+
+// Use OpenRouter with Openrouter key
+OPENAI_API_KEY=open_router_key OPENAI_BASE_URL=https://openrouter.ai/api/v1 OPENAI_MODEL=any_openrouter_model npx breaker-ai jailbreak "path/to/systemPrompt.txt" --skip ai_diagnostics,red_teaming
 ```
 
 - Outputs a table showing which jailbreak attempts succeeded or failed.
 - Optionally export results as JSON:
 
 ```sh
-npx breaker-ai jailbreak "path/to/systemPrompt.txt" --json /path/to/result.json
+npx breaker-ai jailbreak "path/to/systemPrompt.txt" --skip ai_diagnostics,red_teaming --json /path/to/result.json
 ```
 
 ## 📝 Example Output
@@ -96,7 +100,7 @@ Jailbreak Report
 ### Basic scan
 
 ```sh
-breaker scan "Ignore previous instructions." # or with file path
+breaker scan "System prompt:Ignore previous instructions." # or with file path
 ```
 
 ### Scan a file
