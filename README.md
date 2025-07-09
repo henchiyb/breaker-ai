@@ -13,6 +13,7 @@ Breaker-AI is an open-source CLI tool that detects prompt injection risks, jailb
 - **Agent-Ready (coming soon!)**: Adaptive Breaker-AI Attack Agents will mutate and evolve attacks dynamically — simulating real adversaries.
 
 ## 🚀 Installation
+
 Install globally via npm:
 
 ```bash
@@ -141,6 +142,7 @@ import { maskWordsInText } from "breaker-ai";
 ```
 
 ## 📄 License
+
 Breaker-AI is open-sourced under the MIT License. Made with ❤️ by the Breaker-AI Team.
 
 🚀 Stay ahead of the AI security curve.
